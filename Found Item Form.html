@@ -535,22 +535,22 @@
             }
 
             // Collect form data
-            const formData = {
-                timestamp: new Date().toISOString(),
-                formType: 'FOUND',
-                finderName: document.getElementById('finderName').value,
-                phone: document.getElementById('phone').value,
-                itemType: document.getElementById('itemType').value,
-                description: document.getElementById('description').value,
-                foundLocation: document.getElementById('foundLocation').value,
-                locationDetails: document.getElementById('locationDetails').value || 'Tidak ada',
-                latitude: latitudeInput.value || 'Tidak ada',
-                longitude: longitudeInput.value || 'Tidak ada',
-                foundDateTime: document.getElementById('foundDateTime').value,
-                itemStatus: document.getElementById('itemStatus').value,
-                additionalInfo: document.getElementById('additionalInfo').value || 'Tidak ada',
-                photoUploaded: 'Ya'
-            };
+           const formData = {
+    timestamp: new Date().toISOString(),
+    formType: 'LOST',
+    name: document.getElementById('name').value,
+    phone: document.getElementById('phone').value,
+    idNumber: document.getElementById('idNumber').value,
+    itemType: document.getElementById('itemType').value,
+    description: document.getElementById('description').value,
+    lastLocation: document.getElementById('lastLocation').value,
+    latitude: document.getElementById('latitude').value || 'Tidak ada',
+    longitude: document.getElementById('longitude').value || 'Tidak ada',
+    lostDateTime: document.getElementById('lostDateTime').value || '',
+    additionalInfo: document.getElementById('additionalInfo').value || '',
+    photoUploaded: document.getElementById('itemPhoto').files.length > 0 ? 'Ya' : 'Tidak'
+};
+
 
             // Simulate submission
             submitBtn.disabled = true;

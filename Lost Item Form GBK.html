@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Barang Hilang - GBK</title>
     <style>
         :root {
@@ -442,7 +441,7 @@ content="width=device-width, initial-scale=1.0">
 
         getLocationBtn.addEventListener('click', function() {
             if (navigator.geolocation) {
-                getLocationBtn.enable = true;
+                getLocationBtn.disabled = true;
                 getLocationBtn.textContent = '⏳ Mendapatkan lokasi...';
 
                 navigator.geolocation.getCurrentPosition(
@@ -481,7 +480,7 @@ content="width=device-width, initial-scale=1.0">
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;
-                    photoPreview.classList.add('not active');
+                    photoPreview.classList.add('active');
                 };
                 reader.readAsDataURL(file);
             }
@@ -527,12 +526,19 @@ content="width=device-width, initial-scale=1.0">
                 form.style.display = 'none';
                 successMessage.classList.add('active');
                 
-                            // KIRIM KE GSHEET
-            const params = new URLSearchParams(formData).toString();
-            fetch('https://script.google.com/macros/s/AKfycbzu-3H7ft85dlHuRriZcuupdAjnMBx1xtRRGMLad5g/exec?' + params, {
-                method: 'GET'
-            }).then(()
+                // Store in localStorage for demo
+                const existingData = JSON.parse(localStorage.getItem('lostItems') || '[]');
+                existingData.push(formData);
+                localStorage.setItem('lostItems', JSON.stringify(existingData));
+            }, 1500);
+        });
 
+        function showError(message) {
+            errorAlert.textContent = message;
+            errorAlert.classList.add('active');
+            setTimeout(() => {
+                errorAlert.classList.remove('active');
+            }, 5000);
         }
 
         // Phone number formatting

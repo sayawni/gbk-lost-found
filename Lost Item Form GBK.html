@@ -311,7 +311,10 @@
             const params = new URLSearchParams(formData).toString();
             const scriptURL = 'https://script.google.com/macros/s/AKfycbzRxrpDRB8mQK3W2ZQ4YZ3y5yxcly-jPLeQbmPgS5ZClthbiW2zOTJTZmrVy5_pA1TG/exec';
             
-            fetch(scriptURL + '?' + params, { method: 'GET', mode: 'no-cors' })
+          // ANTI CORS - DIRECT REDIRECT
+const params = new URLSearchParams(formData).toString();
+const scriptURL = 'const scriptURL = 'https://script.google.com/macros/s/AKfycbzRxrpDRB8'
+
             .then(() => {
                 form.style.display = 'none';
                 successMessage.classList.add('active');

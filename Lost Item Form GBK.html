@@ -552,5 +552,23 @@
             e.target.value = value;
         });
     </script>
+    <script>
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzu-3H7ft85dlHuRriZcuupdAjnMBx1xtRRGMLad5g/exec';
+
+const form = document.getElementById('lostItemForm');
+const submitBtn = document.getElementById('submitBtn');
+const successMessage = document.getElementById('successMessage');
+const errorAlert = document.getElementById('errorAlert');
+
+// Location
+const getLocationBtn = document.getElementById('getLocationBtn');
+const locationInfo = document.getElementById('locationInfo');
+const locationText = document.getElementById('locationText');
+const latitudeInput = document.getElementById('latitude');
+const longitudeInput = document.getElementById('longitude');
+
+getLocationBtn.addEventListener('click', () => {
+    if (navigator.geolocation)
+
 </body>
 </html>

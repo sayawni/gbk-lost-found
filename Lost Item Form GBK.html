@@ -553,6 +553,7 @@
         });
     </script>
     <script>
+<script>
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzu-3H7ft85dlHuRriZcuupdAjnMBx1xtRRGMLad5g/exec';
 
 const form = document.getElementById('lostItemForm');
@@ -560,7 +561,7 @@ const submitBtn = document.getElementById('submitBtn');
 const successMessage = document.getElementById('successMessage');
 const errorAlert = document.getElementById('errorAlert');
 
-// Location
+// Location GPS
 const getLocationBtn = document.getElementById('getLocationBtn');
 const locationInfo = document.getElementById('locationInfo');
 const locationText = document.getElementById('locationText');
@@ -568,7 +569,87 @@ const latitudeInput = document.getElementById('latitude');
 const longitudeInput = document.getElementById('longitude');
 
 getLocationBtn.addEventListener('click', () => {
-    if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            latitudeInput.value = pos.coords.latitude;
+            longitudeInput.value = pos.coords.longitude;
+            locationText.textContent = `Lat:${pos.coords.latitude.toFixed(6)} Lon:${pos.coords.longitude.toFixed(6)}`;
+            locationInfo.classList.add('active');
+        },
+        () => showError('GPS error'),
+        { enableHighAccuracy: true }
+    );
+});
+
+// Photo preview
+document.getElementById('itemPhoto').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+            document.getElementById('previewImage').src = ev.target.result;
+            document.getElementById('photoPreview').classList.add('active');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Form submit KE GOOGLE SHEETS
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+    
+    // Validate KTP
+    const idNumber = document.getElementById('idNumber').value;
+    if (!/^\d{16}$/.test(idNumber)) {
+        showError('KTP harus 16 angka');
+        return;
+    }
+
+    const formData = {
+        timestamp: new Date().toISOString(),
+        formType: 'LOST',
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        idNumber,
+        itemType: document.getElementById('itemType').value,
+        description: document.getElementById('description').value,
+        lastLocation: document.getElementById('lastLocation').value,
+        latitude: latitudeInput.value || '',
+        longitude: longitudeInput.value || '',
+        lostDateTime: document.getElementById('lostDateTime').value || '',
+        additionalInfo: document.getElementById('additionalInfo').value || '',
+        photoUploaded: document.getElementById('itemPhoto').files.length ? 'Ya' : 'Tidak'
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Mengirim...';
+
+    try {
+        // FIX CORS: pakai GET dengan query params (lebih reliable untuk Apps Script)
+        const params = new URLSearchParams(formData).toString();
+        const response = await fetch(`${WEB_APP_URL}?${params}`, {
+            method: 'GET',
+            cache: 'no-cache'
+        });
+        
+        form.style.display = 'none';
+        successMessage.classList.add('active');
+    } catch (error) {
+        console.error(error);
+        showError('Gagal kirim. Coba lagi atau hubungi GBK.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Kirim Laporan';
+    }
+});
+
+function showError(msg) {
+    const alert = document.getElementById('errorAlert');
+    alert.textContent = msg;
+    alert.classList.add('active');
+    setTimeout(() => alert.classList.remove('active'), 5000);
+}
+</script>
 
 </body>
 </html>

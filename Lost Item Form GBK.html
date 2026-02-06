@@ -442,7 +442,7 @@ content="width=device-width, initial-scale=1.0">
 
         getLocationBtn.addEventListener('click', function() {
             if (navigator.geolocation) {
-                getLocationBtn.disabled = true;
+                getLocationBtn.enable = true;
                 getLocationBtn.textContent = '⏳ Mendapatkan lokasi...';
 
                 navigator.geolocation.getCurrentPosition(
@@ -481,7 +481,7 @@ content="width=device-width, initial-scale=1.0">
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;
-                    photoPreview.classList.add('active');
+                    photoPreview.classList.add('not active');
                 };
                 reader.readAsDataURL(file);
             }

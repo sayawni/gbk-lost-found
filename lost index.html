@@ -518,20 +518,28 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Mengirim...';
 
-            // In real implementation, send to backend/Google Sheets API
-            setTimeout(() => {
-                console.log('Form Data:', formData);
-                
-                // Show success
-                form.style.display = 'none';
-                successMessage.classList.add('active');
-                
-                // Store in localStorage for demo
-                const existingData = JSON.parse(localStorage.getItem('lostItems') || '[]');
-                existingData.push(formData);
-                localStorage.setItem('lostItems', JSON.stringify(existingData));
-            }, 1500);
-        });
+           // KIRIM KE GOOGLE SHEET
+submitBtn.disabled = true;
+submitBtn.textContent = '⏳ Mengirim...';
+
+const params = new URLSearchParams(formData).toString();
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzu-3H7ft85dlHuRriZcuupdAjnMBx1xtRRGMLad5g/exec';
+
+fetch(scriptURL + '?' + params, {
+    method: 'GET',
+    mode: 'no-cors'
+})
+.then(() => {
+    console.log('✅ Berhasil dikirim ke GSheet');
+    form.style.display = 'none';
+    successMessage.classList.add('active');
+})
+.catch(error => {
+    console.error('❌ Error:', error);
+    showError('Gagal mengirim data. Coba lagi.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Kirim Laporan / Submit Report';
+});
 
         function showError(message) {
             errorAlert.textContent = message;

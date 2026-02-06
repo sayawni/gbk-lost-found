@@ -458,60 +458,50 @@
     </div>
 
     <script>
-        // Form elements
-        const form = document.getElementById('foundItemForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-        const errorAlert = document.getElementById('errorAlert');
-        const formContent = form.parentElement;
+    // DOM elements
+    const form = document.getElementById('lostItemForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInfo = document.getElementById('locationInfo');
+    const locationText = document.getElementById('locationText');
+    const photoInput = document.getElementById('itemPhoto');
+    const photoPreview = document.getElementById('photoPreview');
+    const previewImage = document.getElementById('previewImage');
 
-        // Set default datetime to now
-        const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        document.getElementById('foundDateTime').value = now.toISOString().slice(0, 16);
+    // Check if elements exist
+    if (!form || !submitBtn) {
+        console.error('❌ Form elements not found!');
+    }
 
-        // Location handling
-        const getLocationBtn = document.getElementById('getLocationBtn');
-        const locationInfo = document.getElementById('locationInfo');
-        const locationText = document.getElementById('locationText');
-        const latitudeInput = document.getElementById('latitude');
-        const longitudeInput = document.getElementById('longitude');
-
+    // Location handler
+    if (getLocationBtn) {
         getLocationBtn.addEventListener('click', function() {
             if (navigator.geolocation) {
                 getLocationBtn.disabled = true;
                 getLocationBtn.textContent = '⏳ Mendapatkan lokasi...';
-
+                
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-                        
-                        latitudeInput.value = lat;
-                        longitudeInput.value = lon;
-                        
-                        locationText.textContent = `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`;
+                        document.getElementById('latitude').value = position.coords.latitude;
+                        document.getElementById('longitude').value = position.coords.longitude;
+                        locationText.textContent = `Lat: ${position.coords.latitude.toFixed(6)}, Lon: ${position.coords.longitude.toFixed(6)}`;
                         locationInfo.classList.add('active');
-                        
-                        getLocationBtn.textContent = '✅ Lokasi Berhasil Didapatkan';
+                        getLocationBtn.textContent = '✅ Lokasi Berhasil';
                         getLocationBtn.style.background = '#10b981';
                     },
-                    function(error) {
+                    function() {
                         getLocationBtn.disabled = false;
-                        getLocationBtn.textContent = '📍 Dapatkan Lokasi Saya / Get My Location';
-                        showError('Gagal mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.');
+                        getLocationBtn.textContent = '📍 Dapatkan Lokasi Saya';
+                        alert('Gagal mendapatkan lokasi');
                     }
                 );
-            } else {
-                showError('Browser Anda tidak mendukung geolocation');
             }
         });
+    }
 
-        // Photo preview handling
-        const photoInput = document.getElementById('itemPhoto');
-        const photoPreview = document.getElementById('photoPreview');
-        const previewImage = document.getElementById('previewImage');
-
+    // Photo preview
+    if (photoInput) {
         photoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -523,72 +513,62 @@
                 reader.readAsDataURL(file);
             }
         });
+    }
 
-        // Form submission
+    // Form submission
+    if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            console.log('🔵 Form submitted!');
             
-            // Validate photo
-            if (!photoInput.files.length) {
-                showError('Foto barang wajib diupload untuk membantu identifikasi');
-                return;
-            }
-
-            // Collect form data
-           const formData = {
-    timestamp: new Date().toISOString(),
-    formType: 'LOST',
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    idNumber: document.getElementById('idNumber').value,
-    itemType: document.getElementById('itemType').value,
-    description: document.getElementById('description').value,
-    lastLocation: document.getElementById('lastLocation').value,
-    latitude: document.getElementById('latitude').value || 'Tidak ada',
-    longitude: document.getElementById('longitude').value || 'Tidak ada',
-    lostDateTime: document.getElementById('lostDateTime').value || '',
-    additionalInfo: document.getElementById('additionalInfo').value || '',
-    photoUploaded: document.getElementById('itemPhoto').files.length > 0 ? 'Ya' : 'Tidak'
-};
-
-
-            // Simulate submission
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Mengirim...';
-
-            // In real implementation, send to backend/Google Sheets API
-            setTimeout(() => {
-                console.log('Form Data:', formData);
-                
-                // Show success
+            submitBtn.textContent = '⏳ Mengirim...';
+            
+            const formData = {
+                timestamp: new Date().toISOString(),
+                formType: 'LOST',
+                name: document.getElementById('name').value || '',
+                phone: document.getElementById('phone').value || '',
+                idNumber: document.getElementById('idNumber').value || '',
+                itemType: document.getElementById('itemType').value || '',
+                description: document.getElementById('description').value || '',
+                lastLocation: document.getElementById('lastLocation').value || '',
+                latitude: document.getElementById('latitude').value || '',
+                longitude: document.getElementById('longitude').value || '',
+                lostDateTime: document.getElementById('lostDateTime').value || '',
+                additionalInfo: document.getElementById('additionalInfo').value || '',
+                photoUploaded: photoInput && photoInput.files.length > 0 ? 'Ya' : 'Tidak'
+            };
+            
+            console.log('📤 Sending data:', formData);
+            
+            const params = new URLSearchParams(formData).toString();
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzRxrpDRB8mQK3W2ZQ4YZ3y5yxcly-jPLeQbmPgS5ZClthbiW2zOTJTZmrVy5_pA1TG/exec';
+            
+            fetch(scriptURL + '?' + params, { method: 'GET', mode: 'no-cors' })
+            .then(() => {
+                console.log('✅ Success!');
                 form.style.display = 'none';
                 successMessage.classList.add('active');
-                
-                // Store in localStorage for demo
-                const existingData = JSON.parse(localStorage.getItem('foundItems') || '[]');
-                existingData.push(formData);
-                localStorage.setItem('foundItems', JSON.stringify(existingData));
-            }, 1500);
+            })
+            .catch((err) => {
+                console.error('❌ Error:', err);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Kirim Laporan';
+            });
         });
+    }
 
-        function showError(message) {
-            errorAlert.textContent = message;
-            errorAlert.classList.add('active');
-            setTimeout(() => {
-                errorAlert.classList.remove('active');
-            }, 5000);
-        }
-
-        // Phone number formatting
-        document.getElementById('phone').addEventListener('input', function(e) {
+    // Phone formatting
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.startsWith('62')) {
-                value = '+' + value;
-            } else if (value.startsWith('0')) {
-                value = value;
-            }
+            if (value.startsWith('62')) value = '+' + value;
             e.target.value = value;
         });
-    </script>
+    }
+</script>
+
 </body>
 </html>

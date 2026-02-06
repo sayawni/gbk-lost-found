@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Barang Hilang - GBK</title>
+    <style>
+        :root {
+            --color-primary: #ef4444;
+            --color-primary-hover: #dc2626;
+            --color-background: #ffffff;
+            --color-surface: #f9fafb;
+            --color-text: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-border: #e5e7eb;
+            --color-success: #10b981;
+            --color-error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--color-background);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #dc2626 100%);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .icon-badge {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+        }
+
+        .form-content {
+            padding: 32px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .required {
+            color: var(--color-error);
+            margin-left: 4px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--color-background);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border: 2px dashed var(--color-border);
+            border-radius: 8px;
+            background: var(--color-surface);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text-secondary);
+        }
+
+        .file-upload-button:hover {
+            border-color: var(--color-primary);
+            background: #fef2f2;
+        }
+
+        .file-preview {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--color-surface);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-preview.active {
+            display: block;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .location-button {
+            width: 100%;
+            padding: 12px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .location-button:hover {
+            background: #2563eb;
+        }
+
+        .location-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .location-info {
+            margin-top: 12px;
+            padding: 12px;
+            background: #dbeafe;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .location-info.active {
+            display: block;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .submit-button:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .submit-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            margin-top: 6px;
+        }
+
+        .success-message {
+            display: none;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 40px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon-badge">🔍</div>
+            <h1>Form Barang Hilang</h1>
+            <p>Gelora Bung Karno (GBK) | Lost Item Report</p>
+        </div>
+
+        <div class="form-content">
+            <div class="alert error" id="errorAlert"></div>
+
+            <form id="lostItemForm">
+                <div class="form-group">
+                    <label class="form-label">
+                        Nama Lengkap / Full Name<span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="name" required placeholder="Masukkan nama lengkap Anda">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Nomor Telepon / Phone Number<span class="required">*</span>
+                    </label>
+                    <input type="tel" class="form-input" id="phone" required placeholder="+62 xxx xxxx xxxx">
+                    <p class="help-text">Format: +62 atau 08xx</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Nomor KTP / National ID Number<span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="idNumber" required placeholder="16 digit KTP" maxlength="16">
+                    <p class="help-text">Untuk verifikasi kepemilikan barang</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Jenis Barang Hilang / Lost Item Type<span class="required">*</span>
+                    </label>
+                    <select class="form-select" id="itemType" required>
+                        <option value="">Pilih jenis barang</option>
+                        <option value="Dompet/Wallet">Dompet / Wallet</option>
+                        <option value="Handphone">Handphone / Mobile Phone</option>
+                        <option value="Tas">Tas / Bag</option>
+                        <option value="Kunci">Kunci / Keys</option>
+                        <option value="Dokumen">Dokumen / Documents</option>
+                        <option value="Perhiasan">Perhiasan / Jewelry</option>
+                        <option value="Elektronik">Elektronik / Electronics</option>
+                        <option value="Pakaian">Pakaian / Clothing</option>
+                        <option value="Lainnya">Lainnya / Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Deskripsi Barang / Item Description<span class="required">*</span>
+                    </label>
+                    <textarea class="form-textarea" id="description" required placeholder="Deskripsikan barang hilang Anda dengan detail (warna, merek, ciri khusus, dll)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Lokasi Terakhir / Last Known Location<span class="required">*</span>
+                    </label>
+                    <select class="form-select" id="lastLocation" required>
+                        <option value="">Pilih lokasi</option>
+                        <option value="Stadion Utama">Stadion Utama / Main Stadium</option>
+                        <option value="Istora Senayan">Istora Senayan</option>
+                        <option value="Area Parkir">Area Parkir / Parking Area</option>
+                        <option value="Toilet">Toilet / Restroom</option>
+                        <option value="Food Court">Food Court</option>
+                        <option value="Tribune">Tribune / Stands</option>
+                        <option value="Pintu Masuk">Pintu Masuk / Entrance</option>
+                        <option value="Lainnya">Lainnya / Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Lokasi Pinpoint / GPS Location
+                    </label>
+                    <button type="button" class="location-button" id="getLocationBtn">
+                        📍 Dapatkan Lokasi Saya / Get My Location
+                    </button>
+                    <div class="location-info" id="locationInfo">
+                        <strong>Lokasi terdeteksi:</strong><br>
+                        <span id="locationText"></span>
+                    </div>
+                    <input type="hidden" id="latitude">
+                    <input type="hidden" id="longitude">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Foto Barang / Item Photo
+                    </label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" class="file-upload-input" id="itemPhoto" accept="image/*" capture="environment">
+                        <div class="file-upload-button">
+                            <span>📷</span>
+                            <span>Ambil/Upload Foto Barang</span>
+                        </div>
+                    </div>
+                    <div class="file-preview" id="photoPreview">
+                        <strong>Preview:</strong>
+                        <img id="previewImage" alt="Preview">
+                    </div>
+                    <p class="help-text">Opsional: Upload foto barang atau foto serupa untuk memudahkan identifikasi</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Tanggal & Waktu Kehilangan / Date & Time Lost
+                    </label>
+                    <input type="datetime-local" class="form-input" id="lostDateTime">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Informasi Tambahan / Additional Information
+                    </label>
+                    <textarea class="form-textarea" id="additionalInfo" placeholder="Informasi lain yang dapat membantu pencarian barang Anda"></textarea>
+                </div>
+
+                <button type="submit" class="submit-button" id="submitBtn">
+                    Kirim Laporan / Submit Report
+                </button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✅</div>
+                <h2 style="color: var(--color-success); margin-bottom: 12px;">Laporan Berhasil Dikirim!</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 24px;">
+                    Terima kasih telah melaporkan barang hilang Anda. Tim GBK akan menghubungi Anda jika barang ditemukan.
+                </p>
+                <button type="button" class="submit-button" onclick="location.reload()" style="background: #10b981;">
+                    Laporkan Barang Lain
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form elements
+        const form = document.getElementById('lostItemForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorAlert = document.getElementById('errorAlert');
+        const formContent = form.parentElement;
+
+        // Location handling
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        const locationInfo = document.getElementById('locationInfo');
+        const locationText = document.getElementById('locationText');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+
+        getLocationBtn.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                getLocationBtn.disabled = true;
+                getLocationBtn.textContent = '⏳ Mendapatkan lokasi...';
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        latitudeInput.value = lat;
+                        longitudeInput.value = lon;
+                        
+                        locationText.textContent = `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`;
+                        locationInfo.classList.add('active');
+                        
+                        getLocationBtn.textContent = '✅ Lokasi Berhasil Didapatkan';
+                        getLocationBtn.style.background = '#10b981';
+                    },
+                    function(error) {
+                        getLocationBtn.disabled = false;
+                        getLocationBtn.textContent = '📍 Dapatkan Lokasi Saya / Get My Location';
+                        showError('Gagal mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.');
+                    }
+                );
+            } else {
+                showError('Browser Anda tidak mendukung geolocation');
+            }
+        });
+
+        // Photo preview handling
+        const photoInput = document.getElementById('itemPhoto');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewImage = document.getElementById('previewImage');
+
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    photoPreview.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate ID number
+            const idNumber = document.getElementById('idNumber').value;
+            if (idNumber.length !== 16 || !/^\d+$/.test(idNumber)) {
+                showError('Nomor KTP harus 16 digit angka');
+                return;
+            }
+
+            // Collect form data
+            const formData = {
+                timestamp: new Date().toISOString(),
+                formType: 'LOST',
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                idNumber: idNumber,
+                itemType: document.getElementById('itemType').value,
+                description: document.getElementById('description').value,
+                lastLocation: document.getElementById('lastLocation').value,
+                latitude: latitudeInput.value || 'Tidak ada',
+                longitude: longitudeInput.value || 'Tidak ada',
+                lostDateTime: document.getElementById('lostDateTime').value || 'Tidak diisi',
+                additionalInfo: document.getElementById('additionalInfo').value || 'Tidak ada',
+                photoUploaded: photoInput.files.length > 0 ? 'Ya' : 'Tidak'
+            };
+
+            // Simulate submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mengirim...';
+
+            // In real implementation, send to backend/Google Sheets API
+            setTimeout(() => {
+                console.log('Form Data:', formData);
+                
+                // Show success
+                form.style.display = 'none';
+                successMessage.classList.add('active');
+                
+                // Store in localStorage for demo
+                const existingData = JSON.parse(localStorage.getItem('lostItems') || '[]');
+                existingData.push(formData);
+                localStorage.setItem('lostItems', JSON.stringify(existingData));
+            }, 1500);
+        });
+
+        function showError(message) {
+            errorAlert.textContent = message;
+            errorAlert.classList.add('active');
+            setTimeout(() => {
+                errorAlert.classList.remove('active');
+            }, 5000);
+        }
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.startsWith('62')) {
+                value = '+' + value;
+            } else if (value.startsWith('0')) {
+                value = value;
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

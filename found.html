@@ -218,7 +218,7 @@
       };
 
       const params = new URLSearchParams(data).toString();
-      const url = `https://script.google.com/macros/s/AKfycbzfmkBNVZfH70IjYHkN6p8XuqzGWAtMsYCblvVzCL7CV-hSDUMoW07Y2rGsOURnu4hexA/exec`;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziTD7TlezDvbM0s3vd-sJZf0AuWZJhKCnN9ysESjjkf5OK7ydc-SRGp_cAz3IpoOQS/exec';
 
       fetch(`${url}?${params}`, { method: 'GET', mode: 'no-cors' })
         .then(() => {

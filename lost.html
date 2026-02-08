@@ -28,6 +28,7 @@ body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#fef
 .success-message{display:none;padding:32px;text-align:center}
 .success-message.active{display:block}
 .success-icon{width:80px;height:80px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:40px}
+.help-text{font-size:13px;color:#6b7280;margin-top:6px}
 </style>
 </head>
 <body>
@@ -54,24 +55,59 @@ body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#fef
 <div class="form-group">
 <label class="form-label">Jenis Barang<span class="required">*</span></label>
 <select class="form-select" id="itemType" required>
-<option value="">Pilih</option>
+<option value="">Pilih jenis barang</option>
 <option value="Dompet">Dompet</option>
 <option value="Handphone">Handphone</option>
-<option value="Tas">Tas</option>
+<option value="Tas/Ransel">Tas/Ransel</option>
 <option value="Kunci">Kunci</option>
+<option value="Dokumen">Dokumen/KTP/SIM</option>
+<option value="Kartu Kredit/Debit">Kartu Kredit/Debit</option>
+<option value="Kacamata">Kacamata</option>
+<option value="Jam Tangan">Jam Tangan</option>
+<option value="Perhiasan">Perhiasan/Aksesoris</option>
+<option value="Pakaian">Pakaian/Jaket</option>
+<option value="Sepatu">Sepatu/Sendal</option>
+<option value="Botol Minum">Botol Minum/Tumbler</option>
+<option value="Powerbank">Powerbank/Charger</option>
+<option value="Earphone">Earphone/Headset</option>
+<option value="Payung">Payung</option>
 <option value="Lainnya">Lainnya</option>
 </select>
 </div>
 <div class="form-group">
 <label class="form-label">Deskripsi<span class="required">*</span></label>
-<textarea class="form-textarea" id="description" required></textarea>
+<textarea class="form-textarea" id="description" required placeholder="Deskripsikan barang (warna, merek, ciri khusus)"></textarea>
 </div>
 <div class="form-group">
 <label class="form-label">Lokasi Terakhir<span class="required">*</span></label>
 <select class="form-select" id="lastLocation" required>
-<option value="">Pilih</option>
+<option value="">Pilih lokasi</option>
 <option value="Stadion Utama">Stadion Utama</option>
-<option value="Parkir">Area Parkir</option>
+<option value="Stadion Madya">Stadion Madya</option>
+<option value="Stadion Akuatik">Stadion Akuatik</option>
+<option value="Istora Senayan">Istora Senayan</option>
+<option value="GBK Arena">GBK Arena</option>
+<option value="Gedung Basket">Gedung Basket</option>
+<option value="Lapangan Hoki 1">Lapangan Hoki 1</option>
+<option value="Lapangan Hoki 2">Lapangan Hoki 2</option>
+<option value="Lapangan Panahan">Lapangan Panahan</option>
+<option value="Lapangan Sepak Bola A">Lapangan Sepak Bola A</option>
+<option value="Lapangan Sepak Bola B">Lapangan Sepak Bola B</option>
+<option value="Lapangan Sepak Bola C">Lapangan Sepak Bola C</option>
+<option value="Tenis Indoor">Tenis Indoor</option>
+<option value="Tenis Outdoor">Tenis Outdoor</option>
+<option value="Stadion Tenis">Stadion Tenis</option>
+<option value="Lapangan Softball">Lapangan Softball</option>
+<option value="Lapangan Baseball">Lapangan Baseball</option>
+<option value="Lapangan Squash">Lapangan Squash</option>
+<option value="Lapangan Rugby">Lapangan Rugby</option>
+<option value="Plaza Utara">Plaza Utara</option>
+<option value="Plaza Tenggara">Plaza Tenggara</option>
+<option value="Plaza Timur">Plaza Timur</option>
+<option value="Plaza Barat">Plaza Barat</option>
+<option value="Parkir Timur">Parkir Timur</option>
+<option value="JICC">JICC</option>
+<option value="Indonesia Arena">Indonesia Arena</option>
 <option value="Toilet">Toilet</option>
 <option value="Lainnya">Lainnya</option>
 </select>
@@ -82,6 +118,11 @@ body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#fef
 <div class="location-info" id="locationInfo"><span id="locationText"></span></div>
 <input type="hidden" id="latitude">
 <input type="hidden" id="longitude">
+</div>
+<div class="form-group">
+<label class="form-label">Upload Foto Barang</label>
+<input type="file" class="form-input" id="itemPhoto" accept="image/*" style="padding:8px">
+<p class="help-text">Opsional: Upload foto barang untuk memudahkan identifikasi</p>
 </div>
 <button type="submit" class="btn btn-primary" id="submitBtn">Kirim Laporan</button>
 </form>
@@ -100,6 +141,7 @@ const successMessage=document.getElementById('successMessage');
 const getLocationBtn=document.getElementById('getLocationBtn');
 const locationInfo=document.getElementById('locationInfo');
 const locationText=document.getElementById('locationText');
+const photoInput=document.getElementById('itemPhoto');
 
 getLocationBtn.addEventListener('click',function(){
 if(navigator.geolocation){
@@ -141,7 +183,7 @@ latitude:document.getElementById('latitude').value||'',
 longitude:document.getElementById('longitude').value||'',
 lostDateTime:'',
 additionalInfo:'',
-photoUploaded:'Tidak'
+photoUploaded:photoInput.files.length>0?'Ya':'Tidak'
 };
 
 const params=new URLSearchParams(data).toString();

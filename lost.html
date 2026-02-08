@@ -125,6 +125,7 @@
 <div class="form-group">
   
   <label class="form-label">Lokasi GPS <span class="required">*</span></label>
+  
   <button type="button" class="btn btn-location" id="getLocationBtn">📍 Dapatkan Lokasi</button>
 <div class="location-info" id="locationInfo"><span id="locationText"></span></div>
   <input type="hidden" id="latitude" required>
@@ -174,9 +175,6 @@
   const getLocationBtn = document.getElementById('getLocationBtn');
   const locationInfo = document.getElementById('locationInfo');
   const locationText = document.getElementById('locationText');
-  
-  getLocationBtn.addEventListener('click', function() {
-    console.log('GPS clicked'); // DEBUG
     
     getLocationBtn.disabled
 

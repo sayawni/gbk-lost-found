@@ -1,329 +1,162 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Barang Ditemukan - GBK </title>
-    <style>
-        :root {
-            --color-primary: #ef4444;
-            --color-primary-hover: #dc2626;
-            --color-background: #ffffff;
-            --color-surface: #f9fafb;
-            --color-text: #1f2937;
-            --color-text-secondary: #6b7280;
-            --color-border: #e5e7eb;
-            --color-success: #10b981;
-            --color-error: #ef4444;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            color: var(--color-text);
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--color-background);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, #dc2626 100%);
-            color: white;
-            padding: 32px 24px;
-            text-align: center;
-        }
-        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
-        .header p { font-size: 14px; opacity: 0.95; }
-        .icon-badge {
-            width: 64px; height: 64px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 32px;
-        }
-        .form-content { padding: 32px 24px; }
-        .form-group { margin-bottom: 24px; }
-        .form-label {
-            display: block; font-weight: 600; margin-bottom: 8px;
-            color: var(--color-text); font-size: 14px;
-        }
-        .required { color: var(--color-error); margin-left: 4px; }
-        .form-input, .form-textarea, .form-select {
-            width: 100%; padding: 12px 16px;
-            border: 2px solid var(--color-border);
-            border-radius: 8px; font-size: 15px;
-            font-family: inherit; transition: all 0.3s ease;
-            background: var(--color-background);
-        }
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            outline: none; border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
-        .form-textarea { resize: vertical; min-height: 100px; }
-        .location-button {
-            width: 100%; padding: 12px 16px; background: #3b82f6;
-            color: white; border: none; border-radius: 8px;
-            font-size: 15px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; display: flex;
-            align-items: center; justify-content: center; gap: 8px;
-        }
-        .location-button:hover { background: #2563eb; }
-        .location-button:disabled { background: #9ca3af; cursor: not-allowed; }
-        .location-info {
-            margin-top: 12px; padding: 12px;
-            background: #dbeafe; border-radius: 8px;
-            font-size: 14px; display: none;
-        }
-        .location-info.active { display: block; }
-        .file-upload-wrapper { position: relative; overflow: hidden; width: 100%; }
-        .file-upload-input {
-            position: absolute; font-size: 100px; opacity: 0;
-            right: 0; top: 0; cursor: pointer;
-        }
-        .file-upload-button {
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; padding: 12px 16px;
-            border: 2px dashed var(--color-border);
-            border-radius: 8px; background: var(--color-surface);
-            cursor: pointer; transition: all 0.3s ease;
-            color: var(--color-text-secondary);
-        }
-        .file-upload-button:hover {
-            border-color: var(--color-primary); background: #fef2f2;
-        }
-        .file-preview {
-            margin-top: 12px; padding: 12px;
-            background: var(--color-surface); border-radius: 8px;
-            display: none;
-        }
-        .file-preview.active { display: block; }
-        .file-preview img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
-        .submit-button {
-            width: 100%; padding: 16px; background: var(--color-primary);
-            color: white; border: none; border-radius: 8px;
-            font-size: 16px; font-weight: 700; cursor: pointer;
-            transition: all 0.3s ease; margin-top: 8px;
-        }
-        .submit-button:hover {
-            background: var(--color-primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-        .submit-button:disabled {
-            background: #9ca3af; cursor: not-allowed; transform: none;
-        }
-        .help-text {
-            font-size: 13px; color: var(--color-text-secondary); margin-top: 6px;
-        }
-        .success-message {
-            display: none; padding: 24px; text-align: center;
-        }
-        .success-message.active { display: block; }
-        .success-icon {
-            width: 80px; height: 80px; background: #d1fae5;
-            border-radius: 50%; display: flex;
-            align-items: center; justify-content: center;
-            margin: 0 auto 16px; font-size: 40px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lapor Barang Ditemukan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#fef2f2,#fee2e2);padding:20px;min-height:100vh}
+.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
+.header{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:32px 24px;text-align:center}
+.header h1{font-size:24px;margin-bottom:8px}
+.form-content{padding:32px 24px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-weight:600;margin-bottom:8px;font-size:14px}
+.required{color:#ef4444}
+.form-input,.form-textarea,.form-select{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:8px;font-size:15px}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:#ef4444}
+.form-textarea{min-height:100px;resize:vertical}
+.btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px}
+.btn-primary{background:#ef4444;color:#fff}
+.btn-primary:hover{background:#dc2626}
+.btn-primary:disabled{background:#9ca3af;cursor:not-allowed}
+.btn-location{background:#3b82f6;color:#fff}
+.btn-location:hover{background:#2563eb}
+.location-info{margin-top:12px;padding:12px;background:#dbeafe;border-radius:8px;font-size:14px;display:none}
+.location-info.active{display:block}
+.success-message{display:none;padding:32px;text-align:center}
+.success-message.active{display:block}
+.success-icon{width:80px;height:80px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:40px}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="icon-badge">🔍</div>
-            <h1>Form Barang Ditemukang</h1>
-            <p>Gelora Bung Karno (GBK) | Found Item Report</p>
-        </div>
+<div class="container">
+<div class="header">
+<div style="font-size:48px;margin-bottom:16px">🔍</div>
+<h1>Form Barang Ditemukan</h1>
+<p>Gelora Bung Karno (GBK)</p>
+</div>
+<div class="form-content">
+<form id="lostForm">
+<div class="form-group">
+<label class="form-label">Nama Lengkap<span class="required">*</span></label>
+<input type="text" class="form-input" id="name" required>
+</div>
+<div class="form-group">
+<label class="form-label">Nomor Telepon<span class="required">*</span></label>
+<input type="tel" class="form-input" id="phone" required>
+</div>
+<div class="form-group">
+<label class="form-label">Nomor KTP<span class="required">*</span></label>
+<input type="text" class="form-input" id="idNumber" required maxlength="16">
+</div>
+<div class="form-group">
+<label class="form-label">Jenis Barang<span class="required">*</span></label>
+<select class="form-select" id="itemType" required>
+<option value="">Pilih</option>
+<option value="Dompet">Dompet</option>
+<option value="Handphone">Handphone</option>
+<option value="Tas">Tas</option>
+<option value="Kunci">Kunci</option>
+<option value="Lainnya">Lainnya</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label">Deskripsi<span class="required">*</span></label>
+<textarea class="form-textarea" id="description" required></textarea>
+</div>
+<div class="form-group">
+<label class="form-label">Lokasi Terakhir<span class="required">*</span></label>
+<select class="form-select" id="lastLocation" required>
+<option value="">Pilih</option>
+<option value="Stadion Utama">Stadion Utama</option>
+<option value="Parkir">Area Parkir</option>
+<option value="Toilet">Toilet</option>
+<option value="Lainnya">Lainnya</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label">Lokasi GPS</label>
+<button type="button" class="btn btn-location" id="getLocationBtn">📍 Dapatkan Lokasi</button>
+<div class="location-info" id="locationInfo"><span id="locationText"></span></div>
+<input type="hidden" id="latitude">
+<input type="hidden" id="longitude">
+</div>
+<button type="submit" class="btn btn-primary" id="submitBtn">Kirim Laporan</button>
+</form>
+<div class="success-message" id="successMessage">
+<div class="success-icon">✅</div>
+<h2 style="color:#10b981;margin-bottom:12px">Berhasil!</h2>
+<p style="margin-bottom:24px">Laporan telah dikirim. Tim GBK akan menghubungi Anda.</p>
+<button class="btn btn-primary" onclick="location.reload()">Laporkan Lagi</button>
+</div>
+</div>
+</div>
+<script>
+const form=document.getElementById('lostForm');
+const submitBtn=document.getElementById('submitBtn');
+const successMessage=document.getElementById('successMessage');
+const getLocationBtn=document.getElementById('getLocationBtn');
+const locationInfo=document.getElementById('locationInfo');
+const locationText=document.getElementById('locationText');
 
-        <div class="form-content">
-            <form id="foundItemForm">
-                <div class="form-group">
-                    <label class="form-label">Nama Lengkap<span class="required">*</span></label>
-                    <input type="text" class="form-input" id="name" required placeholder="Masukkan nama lengkap">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor Telepon<span class="required">*</span></label>
-                    <input type="tel" class="form-input" id="phone" required placeholder="+62 xxx xxxx xxxx">
-                    <p class="help-text">Format: +62 atau 08xx</p>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor KTP<span class="required">*</span></label>
-                    <input type="text" class="form-input" id="idNumber" required placeholder="16 digit KTP" maxlength="16">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Jenis Barang<span class="required">*</span></label>
-                    <select class="form-select" id="itemType" required>
-                        <option value="">Pilih jenis barang</option>
-                        <option value="Dompet">Dompet / Wallet</option>
-                        <option value="Handphone">Handphone</option>
-                        <option value="Tas">Tas / Bag</option>
-                        <option value="Kunci">Kunci / Keys</option>
-                        <option value="Dokumen">Dokumen</option>
-                        <option value="Perhiasan">Perhiasan</option>
-                        <option value="Elektronik">Elektronik</option>
-                        <option value="Pakaian">Pakaian</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Deskripsi Barang<span class="required">*</span></label>
-                    <textarea class="form-textarea" id="description" required placeholder="Deskripsikan barang (warna, merek, ciri khusus)"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Lokasi Terakhir<span class="required">*</span></label>
-                    <select class="form-select" id="lastLocation" required>
-                        <option value="">Pilih lokasi</option>
-                        <option value="Stadion Utama">Stadion Utama</option>
-                        <option value="Istora Senayan">Istora Senayan</option>
-                        <option value="Area Parkir">Area Parkir</option>
-                        <option value="Toilet">Toilet</option>
-                        <option value="Food Court">Food Court</option>
-                        <option value="Tribune">Tribune</option>
-                        <option value="Pintu Masuk">Pintu Masuk</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Lokasi GPS</label>
-                    <button type="button" class="location-button" id="getLocationBtn">
-                        📍 Dapatkan Lokasi Saya
-                    </button>
-                    <div class="location-info" id="locationInfo">
-                        <strong>Lokasi:</strong> <span id="locationText"></span>
-                    </div>
-                    <input type="hidden" id="latitude">
-                    <input type="hidden" id="longitude">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Foto Barang</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" class="file-upload-input" id="itemPhoto" accept="image/*">
-                        <div class="file-upload-button">
-                            <span>📷</span><span>Upload Foto</span>
-                        </div>
-                    </div>
-                    <div class="file-preview" id="photoPreview">
-                        <strong>Preview:</strong><img id="previewImage" alt="Preview">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tanggal & Waktu Kehilangan</label>
-                    <input type="datetime-local" class="form-input" id="foundDateTime">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Informasi Tambahan</label>
-                    <textarea class="form-textarea" id="additionalInfo" placeholder="Informasi lain"></textarea>
-                </div>
-                <button type="submit" class="submit-button" id="submitBtn">Kirim Laporan</button>
-            </form>
+getLocationBtn.addEventListener('click',function(){
+if(navigator.geolocation){
+getLocationBtn.disabled=true;
+getLocationBtn.textContent='⏳ Loading...';
+navigator.geolocation.getCurrentPosition(
+function(pos){
+document.getElementById('latitude').value=pos.coords.latitude;
+document.getElementById('longitude').value=pos.coords.longitude;
+locationText.textContent=`${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+locationInfo.classList.add('active');
+getLocationBtn.textContent='✅ Lokasi Didapat';
+getLocationBtn.style.background='#10b981';
+},
+function(){
+getLocationBtn.disabled=false;
+getLocationBtn.textContent='📍 Dapatkan Lokasi';
+alert('Gagal mendapatkan lokasi');
+}
+);
+}
+});
 
-            <div class="success-message" id="successMessage">
-                <div class="success-icon">✅</div>
-                <h2 style="color: var(--color-success); margin-bottom: 12px;">Berhasil!</h2>
-                <p style="color: var(--color-text-secondary); margin-bottom: 24px;">
-                    Laporan telah dikirim. Tim GBK akan menghubungi Anda.
-                </p>
-                <button type="button" class="submit-button" onclick="location.reload()" style="background: #10b981;">
-                    Laporkan Lagi
-                </button>
-            </div>
-        </div>
-    </div>
+form.addEventListener('submit',function(e){
+e.preventDefault();
+submitBtn.disabled=true;
+submitBtn.textContent='⏳ Mengirim...';
 
-    <script>
-        const form = document.getElementById('foundItemForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-        const getLocationBtn = document.getElementById('getLocationBtn');
-        const locationInfo = document.getElementById('locationInfo');
-        const locationText = document.getElementById('locationText');
-        const photoInput = document.getElementById('itemPhoto');
-        const photoPreview = document.getElementById('photoPreview');
-        const previewImage = document.getElementById('previewImage');
+const data={
+timestamp:new Date().toISOString(),
+formType:'FOUND',
+name:document.getElementById('name').value,
+phone:document.getElementById('phone').value,
+idNumber:document.getElementById('idNumber').value,
+itemType:document.getElementById('itemType').value,
+description:document.getElementById('description').value,
+lastLocation:document.getElementById('lastLocation').value,
+latitude:document.getElementById('latitude').value||'',
+longitude:document.getElementById('longitude').value||'',
+lostDateTime:'',
+additionalInfo:'',
+photoUploaded:'Tidak'
+};
 
-        // Location
-        getLocationBtn.addEventListener('click', function() {
-            if (navigator.geolocation) {
-                getLocationBtn.disabled = true;
-                getLocationBtn.textContent = '⏳ Loading...';
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        document.getElementById('latitude').value = position.coords.latitude;
-                        document.getElementById('longitude').value = position.coords.longitude;
-                        locationText.textContent = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
-                        locationInfo.classList.add('active');
-                        getLocationBtn.textContent = '✅ Lokasi Didapatkan';
-                        getLocationBtn.style.background = '#10b981';
-                    },
-                    function() {
-                        getLocationBtn.disabled = false;
-                        getLocationBtn.textContent = '📍 Dapatkan Lokasi';
-                        alert('Gagal mendapatkan lokasi');
-                    }
-                );
-            }
-        });
+const params=new URLSearchParams(data).toString();
+const url='https://script.google.com/macros/s/AKfycbzRxrpDRB8mQK3W2ZQ4YZ3y5yxcly-jPLeQbmPgS5ZClthbiW2zOTJTZmrVy5_pA1TG/exec';
 
-        // Photo preview
-        photoInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    photoPreview.classList.add('active');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Form submit
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Mengirim...';
-            
-            const formData = {
-                timestamp: new Date().toISOString(),
-                formType: 'found',
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                idNumber: document.getElementById('idNumber').value,
-                itemType: document.getElementById('itemType').value,
-                description: document.getElementById('description').value,
-                lastLocation: document.getElementById('lastLocation').value,
-                latitude: document.getElementById('latitude').value || '',
-                longitude: document.getElementById('longitude').value || '',
-                foundDateTime: document.getElementById('foundDateTime').value || '',
-                additionalInfo: document.getElementById('additionalInfo').value || '',
-                photoUploaded: photoInput.files.length > 0 ? 'Ya' : 'Tidak'
-            };
-            
-            const params = new URLSearchParams(formData).toString();
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzRxrpDRB8mQK3W2ZQ4YZ3y5yxcly-jPLeQbmPgS5ZClthbiW2zOTJTZmrVy5_pA1TG/exec';
-            
-            // ANTI CORS - DIRECT REDIRECT
-const params = new URLSearchParams(formData).toString();
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzRxrpDRB8
-
-            .then(() => {
-                form.style.display = 'none';
-                successMessage.classList.add('active');
-            })
-            .catch(() => {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Kirim Laporan';
-            });
-        });
-    </script>
+fetch(url+'?'+params,{method:'GET',mode:'no-cors'})
+.then(()=>{
+form.style.display='none';
+successMessage.classList.add('active');
+})
+.catch(()=>{
+submitBtn.disabled=false;
+submitBtn.textContent='Kirim Laporan';
+});
+});
+</script>
 </body>
 </html>

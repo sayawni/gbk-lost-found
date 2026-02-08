@@ -119,19 +119,19 @@
           </select>
         </div>
         
-       <div class="form-group">
-  <label class="form-label">Tanggal Kehilangan <span class="required">*</span></label>
-  <input type="datetime-local" class="form-input" id="lostDateTime" required>
-<div class="form-group">
-  
-  <label class="form-label">Lokasi GPS <span class="required">*</span></label>
-  
-  <button type="button" class="btn btn-location" id="getLocationBtn">📍 Dapatkan Lokasi</button>
-<div class="location-info" id="locationInfo"><span id="locationText"></span></div>
-  <input type="hidden" id="latitude" required>
-  <input type="hidden" id="longitude" required>
-  <p class="help-text">Klik tombol GPS untuk mengisi lokasi secara otomatis</p>
-</div>  
+        <div class="form-group">
+          <label class="form-label">Tanggal Kehilangan <span class="required">*</span></label>
+        <input type="datetime-local" class="form-input" id="lostDateTime" required>
+</div>
+        
+        <div class="form-group">
+          <label class="form-label">Lokasi GPS</label>
+          <button type="button" class="btn btn-location" id="getLocationBtn">📍 Dapatkan Lokasi</button>
+          <div class="location-info" id="locationInfo"><span id="locationText"></span></div>
+          <input type="hidden" id="latitude">
+          <input type="hidden" id="longitude">
+        </div>
+        
         <div class="form-group">
           <label class="form-label">Upload Foto Barang</label>
           <input type="file" class="form-input" id="itemPhoto" accept="image/*" style="padding:8px;">
@@ -165,19 +165,18 @@
   // now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   // document.getElementById('lostDateTime').value = now.toISOString().slice(0, 16);
 
-  function() {
+  getLocationBtn.addEventListener('click', function() {
     if (navigator.geolocation) {
       getLocationBtn.disabled = true;
       getLocationBtn.textContent = '⏳ Loading...';
       navigator.geolocation.getCurrentPosition(
         function(pos) {
-         document.addEventListener('DOMContentLoaded', function() {
-  const getLocationBtn = document.getElementById('getLocationBtn');
-  const locationInfo = document.getElementById('locationInfo');
-  const locationText = document.getElementById('locationText');
-    
-    getLocationBtn.disabled
-
+          document.getElementById('latitude').value = pos.coords.latitude;
+          document.getElementById('longitude').value = pos.coords.longitude;
+          locationText.textContent = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
+          locationInfo.classList.add('active');
+          getLocationBtn.textContent = '✅ Lokasi Didapat';
+          getLocationBtn.style.background = '#10b981';
         },
         function() {
           getLocationBtn.disabled = false;
@@ -187,22 +186,11 @@
       );
     }
   });
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  // VALIDASI GPS WAJIB
-  const lat = document.getElementById('latitude').value;
-  const lon = document.getElementById('longitude').value;
-  if (!lat || !lon) {
-    alert('Lokasi GPS wajib diisi! Klik tombol 📍 Dapatkan Lokasi');
-    return;
-  }
-  
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Mengirim...';
-  
-  // ... rest of code
-});
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Mengirim...';
 
     const data = {
       timestamp: new Date().toISOString(),
@@ -229,7 +217,7 @@ form.addEventListener('submit', function(e) {
         form.style.display = 'none';
         successMessage.classList.add('active');
         setTimeout(() => {
-          window.location.href = 'https://ops-stack-pr.github.io/gbk-lost-found/';
+          window.location.href = 'https://sayawni.github.io/gbk-lost-found/';
         }, 3000);
       })
       .catch(() => {
@@ -238,12 +226,6 @@ form.addEventListener('submit', function(e) {
         alert('Gagal mengirim. Coba lagi.');
       });
   });
-  <script>
-  const form = document.getElementById('lostForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successMessage = document.getElementById('successMessage');
-  const getLocationBtn = document.getElementById('getLocationBtn');
-  const locationInfo =
 </script>
 
 </body>

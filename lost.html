@@ -151,112 +151,91 @@
       </div>
     </div>
   </div>
-<script>
-  const form = document.getElementById('lostForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successMessage = document.getElementById('successMessage');
-  const getLocationBtn = document.getElementById('getLocationBtn');
-  const locationInfo = document.getElementById('locationInfo');
-  const locationText = document.getElementById('locationText');
-  const photoInput = document.getElementById('itemPhoto');
 
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDKnH9lE87Ebubg65dzlLOj4EtbVrduyF47JgZsmqAHzR5YX5HMmEbEUfkC5v091qU/exec';
+  <script>
+    const form = document.getElementById('lostForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInfo = document.getElementById('locationInfo');
+    const locationText = document.getElementById('locationText');
+    const photoInput = document.getElementById('itemPhoto');
 
-  // GPS BUTTON
-  getLocationBtn.addEventListener('click', function() {
-    if (!navigator.geolocation) {
-      alert('Browser tidak support GPS');
-      return;
-    }
-    
-    getLocationBtn.disabled = true;
-    getLocationBtn.textContent = '⏳ Loading...';
-    
-    navigator.geolocation.getCurrentPosition(
-      function(pos) {
-        document.getElementById('latitude').value = pos.coords.latitude;
-        document.getElementById('longitude').value = pos.coords.longitude;
-        locationText.textContent = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
-        locationInfo.classList.add('active');
-        getLocationBtn.textContent = '✅ Lokasi Didapat';
-        getLocationBtn.style.background = '#10b981';
-        getLocationBtn.disabled = false;
-      },
-      function() {
-        getLocationBtn.disabled = false;
-        getLocationBtn.textContent = '📍 Dapatkan Lokasi';
-        alert('Gagal mendapatkan lokasi. Izinkan akses GPS di browser.');
+    // GPS BUTTON
+    getLocationBtn.addEventListener('click', function() {
+      if (!navigator.geolocation) {
+        alert('Browser tidak support GPS');
+        return;
       }
-    );
-  });
-
-  // FORM SUBMIT
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const lat = document.getElementById('latitude').value;
-    const lon = document.getElementById('longitude').value;
-    if (!lat || !lon) {
-      alert('⚠️ Lokasi GPS wajib! Klik tombol 📍 Dapatkan Lokasi terlebih dahulu.');
-      return;
-    }
-    
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Mengirim...';
-
-    const data = {
-      timestamp: new Date().toISOString(),
-      formType: 'LOST',
-      name: document.getElementById('name').value,
-      phone: document.getElementById('phone').value,
-      idNumber: document.getElementById('idNumber').value,
-      itemType: document.getElementById('itemType').value,
-      description: document.getElementById('description').value,
-      location: document.getElementById('lastLocation').value,
-      dateTime: document.getElementById('lostDateTime').value,
-      latitude: lat,
-      longitude: lon
-    };
-
-    // HANDLE FOTO
-    if (photoInput.files.length > 0) {
-      const file = photoInput.files[0];
-      const reader = new FileReader();
       
-      reader.onload = function(e) {
-        data.photoBase64 = e.target.result;
-        data.photoMimeType = file.type;
-        data.photoName = 'LOST_' + Date.now() + '_' + file.name;
-        sendData(data);
-      };
+      getLocationBtn.disabled = true;
+      getLocationBtn.textContent = '⏳ Loading...';
       
-      reader.readAsDataURL(file);
-    } else {
-      sendData(data);
-    }
-  });
-
-  function sendData(data) {
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(result => {
-      form.style.display = 'none';
-      successMessage.classList.add('active');
-      setTimeout(() => {
-        window.location.href = 'https://ops-stack-pr.github.io/gbk-lost-found/';
-      }, 3000);
-    })
-    .catch(error => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Kirim Laporan';
-      alert('Gagal mengirim. Coba lagi.');
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          document.getElementById('latitude').value = pos.coords.latitude;
+          document.getElementById('longitude').value = pos.coords.longitude;
+          locationText.textContent = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
+          locationInfo.classList.add('active');
+          getLocationBtn.textContent = '✅ Lokasi Didapat';
+          getLocationBtn.style.background = '#10b981';
+          getLocationBtn.disabled = false;
+        },
+        function() {
+          getLocationBtn.disabled = false;
+          getLocationBtn.textContent = '📍 Dapatkan Lokasi';
+          alert('Gagal mendapatkan lokasi. Izinkan akses GPS di browser.');
+        }
+      );
     });
-  }
-</script>
 
+    // FORM SUBMIT
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi GPS wajib
+      const lat = document.getElementById('latitude').value;
+      const lon = document.getElementById('longitude').value;
+      if (!lat || !lon) {
+        alert('⚠️ Lokasi GPS wajib! Klik tombol 📍 Dapatkan Lokasi terlebih dahulu.');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Mengirim...';
+
+      const data = {
+        timestamp: new Date().toISOString(),
+        formType: 'LOST',
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        idNumber: document.getElementById('idNumber').value,
+        itemType: document.getElementById('itemType').value,
+        description: document.getElementById('description').value,
+        lastLocation: document.getElementById('lastLocation').value,
+        lostDateTime: document.getElementById('lostDateTime').value,
+        latitude: lat,
+        longitude: lon,
+        photoUploaded: photoInput.files.length > 0 ? 'Ya' : 'Tidak'
+      };
+
+      const params = new URLSearchParams(data).toString();
+      const url = 'https://script.google.com/macros/s/AKfycbzfmkBNVZfH70IjYHkN6p8XuqzGWAtMsYCblvVzCL7CV-hSDUMoW_07Y2rGsOURnu4h/exec';
+
+      fetch(url + '?' + params, { method: 'GET', mode: 'no-cors' })
+        .then(() => {
+          form.style.display = 'none';
+          successMessage.classList.add('active');
+          setTimeout(() => {
+            window.location.href = 'https://ops-stack-pr.github.io/gbk-lost-found/';
+          }, 3000);
+        })
+        .catch(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Kirim Laporan';
+          alert('Gagal mengirim. Coba lagi.');
+        });
+    });
+  </script>
 </body>
 </html>
